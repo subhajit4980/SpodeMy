@@ -16,7 +16,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.example.spodemy.Authentication_Asset.signup_fragment.Companion.TAG
+import com.example.spodemy.All_View.Authentication_View.signup_fragment.Companion.TAG
 import com.example.spodemy.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -26,6 +26,8 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_profile.*
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 class Profile : AppCompatActivity() {
@@ -34,7 +36,7 @@ class Profile : AppCompatActivity() {
     private lateinit var locationCallback: LocationCallback
     private var currentLocation: Location? = null
     private var userDitails:DocumentReference=  Firebase.firestore.collection("user").document(FirebaseAuth.getInstance().currentUser!!.uid.toString().toString())
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +76,10 @@ class Profile : AppCompatActivity() {
                 val age:TextView=findViewById(R.id.age)
                 val Gender:TextView=findViewById(R.id.Gender)
                 name.text=it.data?.get("fullname").toString()
-                age.text=it.data?.get("age").toString()
+                val dob=it.data?.get("dob").toString()
+                val birthyear=dob.substring(5,9).toInt()
+                var currentYear = LocalDate.now().year
+                age.text = (currentYear-birthyear).toString()
                 Gender.text=it.data?.get("gender").toString()
             }
         }
@@ -97,14 +102,6 @@ class Profile : AppCompatActivity() {
                     .toString()
             }
         }
-//            val ref: DatabaseReference =
-//                FirebaseDatabase.getInstance()
-//                    .getReference("Healthify/users/${FirebaseAuth.getInstance().currentUser!!.uid.toString()}")
-//            val fit = fit(he.text.toString(),we.text.toString(),Bmi.toString())
-//            ref.child("Fitness").setValue(fit)
-//                .addOnSuccessListener {
-//                    Toast.makeText(this, "Fitness Updated", Toast.LENGTH_SHORT).show()
-//                }
             val fitdata= mapOf(
                 "weight" to we.text.toString(),
                 "height" to he.text.toString(),
@@ -152,51 +149,6 @@ class Profile : AppCompatActivity() {
                 }
             }
         }
-
-
-//        val Ref: DatabaseReference =
-//            FirebaseDatabase.getInstance()
-//                .getReference("Healthify/users/${FirebaseAuth.getInstance().currentUser!!.uid.toString()}/Fitness")
-//        this?.let {
-//            Ref.get().addOnCompleteListener(it){
-//                    task->
-//                if(task.isSuccessful)
-//                {
-//                    val ds=task.result
-//                    val weigthf:String=ds.child("weight").value.toString()
-//                    val heigthf:String=ds.child("height").value.toString()
-//                    val bmif:String=ds.child("bmi").value.toString()
-//                    edweight.setText(if(weigthf!="")weigthf.toString() else "0")
-//                    edhight.setText(if(heigthf!="")heigthf.toString() else "0")
-//                    bmi.text=if(bmif!="")bmif.toString() else "0"
-//                    var bm:Double=0.0
-//                    if(bmif.isEmpty() || bmif=="")
-//                    {
-//                        bm=0.0
-//                    }else {
-//                        bm = bmif?.toDouble()!!
-//                    }
-//                    if(bm<18.5)
-//                    {
-//                        measure.text="You are underweight"
-//                        measure.setBackgroundColor(Color.RED)
-//                    }
-//                    else if(bm<29.9 && bm>25.0)
-//                    {
-//                        measure.text="You are Overweight"
-//                        measure.setBackgroundColor(Color.RED)
-//                    }
-//                    else if(bm>30.0)
-//                    {
-//                        measure.text="You are Obese Range"
-//                        measure.setBackgroundColor(Color.YELLOW)
-//                    }else{
-//                        measure.text="You are Normal and Healthy"
-//                        measure.setBackgroundColor(Color.GREEN)
-//                    }
-//                }
-//            }
-//        }
     }
 
 

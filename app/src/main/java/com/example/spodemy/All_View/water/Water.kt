@@ -43,7 +43,6 @@ class Water : AppCompatActivity() {
     private var chmonth:String?=null
     @RequiresApi(Build.VERSION_CODES.O)
     private val y=LocalDate.now().year.toString()
-//    private val arr_year= setOf<String>()
     private var userDitails: DocumentReference =  Firebase.firestore.collection("user").document(FirebaseAuth.getInstance().currentUser!!.uid.toString().toString())
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,6 +157,7 @@ class Water : AppCompatActivity() {
                 lineChart.xAxis.setDrawGridLines(false)
                 lineChart.setTouchEnabled(true)
                 lineChart.isDragEnabled=true
+//                lineChart.xAxis
                 lineChart.setScaleEnabled(false)
                 lineChart.animateXY(1000, 1000,Easing.EaseInExpo)
                 val Yaxis=lineChart.axisLeft

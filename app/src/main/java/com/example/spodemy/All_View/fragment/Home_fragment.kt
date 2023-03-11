@@ -14,19 +14,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityCompat.*
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.airbnb.lottie.LottieAnimationView
 import com.example.spodemy.All_View.Food.Add_food
+import com.example.spodemy.All_View.weight.weight_track
 import com.example.spodemy.R
-import com.example.spodemy.ResetStepCountWorker
-import com.example.spodemy.Utils.Common
+import com.example.spodemy.Utils.Constant
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
@@ -36,46 +36,36 @@ import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import kotlinx.android.synthetic.main.fragment_profile_fragment.view.*
 import java.time.LocalDate
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.math.abs
+import kotlin.math.round
 
 @Suppress("SENSELESS_COMPARISON")
 class Home_fragment : Fragment() {
     private var sensorManager: SensorManager? = null
-    private var running = false
-    private var totalsteps = 0f
-    private var previoustotalstep = 0f
     var root:View?=null
     private var no_glass:Int?=null
     private var userDitails: DocumentReference =  Firebase.firestore.collection("user").document(FirebaseAuth.getInstance().currentUser!!.uid.toString().toString())
     private val handler = Handler()
     private var formattedTime:String?=null
-//    @RequiresApi(Build.VERSION_CODES.O)
     private var curr_date:String= if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         LocalDate.now().toString()
     } else {
         TODO("VERSION.SDK_INT < O")
     }
-    private lateinit var notification: Notification
     private val updatetimeRunnable=object :Runnable{
         @RequiresApi(Build.VERSION_CODES.O)
         @SuppressLint("SimpleDateFormat")
         override fun run() {
-            val calendar = Calendar.getInstance()
-            val hour = calendar.get(Calendar.HOUR_OF_DAY)
-            val min=calendar.get(Calendar.MINUTE)
-            val sec=calendar.get(Calendar.SECOND)
-//            curr_date= LocalDate.now().toString()
-            formattedTime="$hour:$min:$sec"
-            if(formattedTime=="0:0:0")
-            {
-                reset()
-            }
             stepCounter()
             greeting_class()
             getenergy()
+            if(!Constant.isInternetOn(requireContext()))
+            {
+                net.visibility=View.VISIBLE
+            }else{
+                net.visibility=View.GONE
+            }
             handler.postDelayed(this,1000)
-
         }
 
     }
@@ -105,6 +95,10 @@ class Home_fragment : Fragment() {
             addwater()
             getenergy()
             addfood()
+            val weight_:FloatingActionButton=root!!.findViewById(R.id.weight_)
+            weight_.setOnClickListener {
+                startActivity(Intent(requireActivity(),weight_track::class.java))
+            }
         var cpbar=root!!.findViewById<CircularProgressBar>(R.id.circularProgressBar)
 //            reset step counter
             try {
@@ -134,23 +128,6 @@ class Home_fragment : Fragment() {
     ///////////////////////////////////////////////
 
 
-    private fun backgroundreset() {
-        val workManager = context?.let { WorkManager.getInstance(it) }
-        val midnight = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-            add(Calendar.DAY_OF_MONTH, 1)
-        }.timeInMillis
-
-        val resetStepCountRequest = OneTimeWorkRequestBuilder<ResetStepCountWorker>()
-            .setInitialDelay(midnight - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-            .build()
-
-        workManager?.enqueue(resetStepCountRequest)
-    }
 // greeting user
     private fun greeting_class() {
         val time:ImageView=root!!.findViewById(R.id.weather)
@@ -254,17 +231,8 @@ class Home_fragment : Fragment() {
 // reset the steps
     @RequiresApi(Build.VERSION_CODES.O)
     private fun reset() {
-//        val cpbar=root!!.findViewById<CircularProgressBar>(R.id.circularProgressBar)
-//            previoustotalstep = totalsteps
-//            val walk:TextView=root!!.findViewById(R.id.walk)
-//            walk.text = "0"
-//            dataupload("0",LocalDate.now().toString())
-//            savedata()
-//            cpbar.apply {
-//                setProgressWithAnimation(0.toFloat())
-//            }
-        val pre_step=Common.loadData(requireContext(),"step_count","total_step","0")!!.toInt()
-        Common.savedata(requireContext(),"step_count","previous_step",pre_step.toString())
+        val pre_step=Constant.loadData(requireContext(),"step_count","total_step","0")!!.toInt()
+        Constant.savedata(requireContext(),"step_count","previous_step",pre_step.toString())
         stepCounter()
          dataupload("0",LocalDate.now().toString())
     }
@@ -317,7 +285,7 @@ class Home_fragment : Fragment() {
     }
 //    add your daily meal
     private fun addfood() {
-        val add:ImageView=root!!.findViewById(R.id.add_food)
+        val add:ImageButton=root!!.findViewById(R.id.add_food)
         add.setOnClickListener {
             val intent=Intent(activity,Add_food::class.java)
             startActivity(intent)
@@ -346,24 +314,27 @@ class Home_fragment : Fragment() {
 //    }
     fun stepCounter()
 {
-        val t_step=Common.loadData(requireContext(),"step_count","total_step","0").toString()
-        val pre_step=Common.loadData(requireContext(),"step_count","previous_step","0").toString()
+        val t_step=Constant.loadData(requireContext(),"step_count","total_step","0").toString()
+        val pre_step=Constant.loadData(requireContext(),"step_count","previous_step","0").toString()
         val curr_step= abs(t_step.toInt()-pre_step.toInt()).toString()
         val walk:TextView=root!!.findViewById(R.id.walk)
         walk.text=curr_step.toString()
+        val burn:TextView=root!!.findViewById(R.id.burn)
+        burn.text=(round(curr_step.toFloat()*0.04).toInt()).toString()
         val cpbar=root!!.findViewById<CircularProgressBar>(R.id.circularProgressBar)
         cpbar.progress= curr_step.toFloat()
-
+        val burnprobar=root!!.findViewById<CircularProgressBar>(R.id.burn_cal)
+        burnprobar.progress=((round(curr_step.toFloat()*0.04).toInt()).toFloat())
     }
     fun getenergy()
     {
         val cal=root!!.findViewById<TextView>(R.id.calorie)
         val cal_meter=root!!.findViewById<CircularProgressBar>(R.id.cal_meter)
-        val b_list=Common.breakfast_list.sumOf { it.calories.toInt() }
-        val m_list=Common.mornsnack_list.sumOf { it.calories.toInt() }
-        val lunch_list=Common.lunch_list.sumOf { it.calories.toInt() }
-        val evening_list=Common.evesnack_list.sumOf { it.calories.toInt() }
-        val dinner_list=Common.dinner_list.sumOf { it.calories.toInt() }
+        val b_list=Constant.breakfast_list.sumOf { it.calories.toInt() }
+        val m_list=Constant.mornsnack_list.sumOf { it.calories.toInt() }
+        val lunch_list=Constant.lunch_list.sumOf { it.calories.toInt() }
+        val evening_list=Constant.evesnack_list.sumOf { it.calories.toInt() }
+        val dinner_list=Constant.dinner_list.sumOf { it.calories.toInt() }
         val total=(b_list+m_list+evening_list+lunch_list+dinner_list)
         if(total>500)
         {
@@ -374,10 +345,8 @@ class Home_fragment : Fragment() {
         }
 //        val total=common.totalKcal
         cal.text=total.toString()
-        cal_meter.setOnClickListener {
-            Toast.makeText(requireActivity(), "$total", Toast.LENGTH_SHORT).show()
-        }
         cal_meter.progress=total.toFloat()
     }
+
 }
 

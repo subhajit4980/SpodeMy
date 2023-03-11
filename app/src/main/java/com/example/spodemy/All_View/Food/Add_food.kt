@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spodemy.Adapter.FoodNameAdapter
 import com.example.spodemy.R
-import com.example.spodemy.Utils.Common
+import com.example.spodemy.Utils.Constant
 import com.example.spodemy.data.Nutrient
 import com.example.spodemy.databinding.ActivityAddFoodBinding
 import kotlinx.android.synthetic.main.activity_add_food.*
@@ -53,11 +53,11 @@ class Add_food : AppCompatActivity() {
             mFragment.arguments = mBundle
             mFragmentTransaction.add(R.id.content_f, mFragment).commit()
         }
-        val b_list=Common.breakfast_list
-        val m_list=Common.mornsnack_list
-        val lunch_list=Common.lunch_list
-        val evening_list=Common.evesnack_list
-        val dinner_list=Common.dinner_list
+        val b_list=Constant.breakfast_list
+        val m_list=Constant.mornsnack_list
+        val lunch_list=Constant.lunch_list
+        val evening_list=Constant.evesnack_list
+        val dinner_list=Constant.dinner_list
         rec_view(binding.bT,binding.breakfastRv1,b_list)
         rec_view(binding.Mt,binding.msRv,m_list)
         rec_view(binding.lun,binding.lunchRv,lunch_list)

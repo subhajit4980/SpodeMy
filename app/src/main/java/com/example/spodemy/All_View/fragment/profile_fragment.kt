@@ -14,13 +14,13 @@ import androidx.cardview.widget.CardView
 import com.example.spodemy.All_View.Food.Food_track
 import com.example.spodemy.All_View.profile.Profile
 import com.example.spodemy.All_View.water.Water
-import com.example.spodemy.Authentication_Asset.MainAuthentication
+import com.example.spodemy.All_View.Authentication_View.MainAuthentication
 import com.example.spodemy.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_profile_fragment.*
 import android.widget.LinearLayout
-import com.example.spodemy.All_View.Steps_Track
+import com.example.spodemy.All_View.step.Steps_Track
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -42,7 +42,7 @@ class profile_fragment : Fragment() {
         root = inflater.inflate(R.layout.fragment_profile_fragment, container, false)
         val steps:LinearLayout=root!!.findViewById(R.id.steps)
         steps.setOnClickListener {
-            startActivity(Intent(requireActivity(),Steps_Track::class.java))
+            startActivity(Intent(requireActivity(), Steps_Track::class.java))
         }
 
 

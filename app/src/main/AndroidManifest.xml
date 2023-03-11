@@ -3,15 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="android.permission.BODY_SENSORS" />
-    <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission
+        android:name="android.permission.ACTIVITY_RECOGNITION"
+        android:maxSdkVersion="33" />
+    <uses-permission
+        android:name="android.permission.BODY_SENSORS"
+        android:maxSdkVersion="33" />
+    <uses-permission
+        android:name="android.permission.BODY_SENSORS_BACKGROUND"
+        android:maxSdkVersion="33" />
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE"
+        android:maxSdkVersion="33" />
+    <uses-permission
+        android:name="android.permission.ACCESS_NOTIFICATION_POLICY"
+        android:maxSdkVersion="33" />
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="33"
         tools:ignore="CoarseFineLocation" />
     <uses-permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:maxSdkVersion="33"
         tools:ignore="CoarseFineLocation" />
 
     <meta-data
@@ -21,7 +34,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name=".Service.NetworkSecurity"
+        android:name=".Application.HMApplicaton"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -31,19 +44,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SpodeMY"
         tools:targetApi="31">
+
         <activity
-            android:name=".All_View.Steps_Track"
+            android:name=".All_View.weight.weight_track"
             android:exported="false" />
         <activity
-            android:name=".All_View.Food.FoodChart"
+            android:name=".All_View.step.Steps_Track"
             android:exported="false" />
         <activity
             android:name=".All_View.Food.Add_food"
             android:exported="false" />
-         <service
-         android:name=".Service.MyService"
-         android:enabled="true"
-         android:exported="false" />
+
+        <service
+            android:name=".Service.MyService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".Service.Jobservice"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <activity
             android:name=".All_View.profile.Profile"
             android:exported="false"
@@ -69,18 +90,19 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".All_View.Home_screen"
+            android:name=".All_View.Home.Home_screen"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".Authentication_Asset.MainAuthentication"
+            android:name=".All_View.Authentication_View.MainAuthentication"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/themesplash"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".Splash_screen"
+            android:name=".All_View.splash_screen.Splash_screen"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/themesplash">

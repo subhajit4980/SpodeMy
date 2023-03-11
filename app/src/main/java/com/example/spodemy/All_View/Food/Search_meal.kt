@@ -15,7 +15,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.spodemy.R
-import com.example.spodemy.Utils.Common
+import com.example.spodemy.Utils.Constant
 import com.example.spodemy.data.Nutrient
 import com.example.spodemy.databinding.FragmentSearchMealBinding
 import kotlinx.android.synthetic.main.fragment_search_meal.*
@@ -66,6 +66,7 @@ class Search_meal : Fragment() {
                 try{
                     loading.show()
                     getNutrientInformation(binding.quantity.text.toString(),binding.unit.text.toString(),binding.foodName.text.toString(),object :ApiCallback{
+                        @SuppressLint("SuspiciousIndentation")
                         override fun onSuccess(
                             cal: String,
                             fat: String,
@@ -118,23 +119,23 @@ class Search_meal : Fragment() {
                             {
                                 if (list.toString()=="breakfast")
                                 {
-                                    Common.breakfast_list.add(Nutrient(binding.foodName.text.toString(),cal.toString(),fat.toString(),pro.toString(),carbs.toString(),sugar.toString()))
+                                    Constant.breakfast_list.add(Nutrient(binding.foodName.text.toString(),cal.toString(),fat.toString(),pro.toString(),carbs.toString(),sugar.toString()))
                                 }
                                 if (list.toString()=="morn_snack")
                                 {
-                                    Common.mornsnack_list.add(Nutrient(binding.foodName.text.toString(),calories.toString(),fat.toString(),protein.toString(),carbs.toString(),sugar.toString()))
+                                    Constant.mornsnack_list.add(Nutrient(binding.foodName.text.toString(),calories.toString(),fat.toString(),protein.toString(),carbs.toString(),sugar.toString()))
                                 }
                                 if (list.toString()=="lunch")
                                 {
-                                    Common.lunch_list.add(Nutrient(binding.foodName.text.toString(),calories.toString(),fat.toString(),protein.toString(),carbs.toString(),sugar.toString()))
+                                    Constant.lunch_list.add(Nutrient(binding.foodName.text.toString(),calories.toString(),fat.toString(),protein.toString(),carbs.toString(),sugar.toString()))
                                 }
                                 if (list.toString()=="evening")
                                 {
-                                    Common.evesnack_list.add(Nutrient(binding.foodName.text.toString(),calories.toString(),fat.toString(),protein.toString(),carbs.toString(),sugar.toString()))
+                                    Constant.evesnack_list.add(Nutrient(binding.foodName.text.toString(),calories.toString(),fat.toString(),protein.toString(),carbs.toString(),sugar.toString()))
                                 }
                                 if (list.toString()=="dinner")
                                 {
-                                    Common.dinner_list.add(Nutrient(binding.foodName.text.toString(),calories.toString(),fat.toString(),protein.toString(),carbs.toString(),sugar.toString()))
+                                    Constant.dinner_list.add(Nutrient(binding.foodName.text.toString(),calories.toString(),fat.toString(),protein.toString(),carbs.toString(),sugar.toString()))
                                 }
                                 loading.dismiss()
                                 binding.nutrients.visibility=View.GONE

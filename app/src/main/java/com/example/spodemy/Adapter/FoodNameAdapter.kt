@@ -14,7 +14,7 @@ class FoodNameAdapter(val foodlist:ArrayList<Nutrient>):
     inner class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
         val food_name:TextView=itemView.findViewById(R.id.item_name)
         val cal:TextView=itemView.findViewById(R.id.calo)
-        fun inialize(item:Nutrient)
+        fun inialize(item: Nutrient)
         {
             food_name.text=item.foodName.toString()
             cal.text=item.calories.toString()
@@ -28,7 +28,7 @@ class FoodNameAdapter(val foodlist:ArrayList<Nutrient>):
         return foodlist.size
     }
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-//        holder.food_name.text=foodlist[position].foodName
+        holder.food_name.text=foodlist[position].foodName
         holder.inialize(foodlist[position])
     }
     private val touchHelper=object :ItemTouchHelper.SimpleCallback(

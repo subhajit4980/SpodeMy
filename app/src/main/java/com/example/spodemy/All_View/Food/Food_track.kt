@@ -46,9 +46,9 @@ class Food_track : AppCompatActivity() {
         val second = calendar.get(Calendar.SECOND)
         val formattedTime = "${String.format("%02d", hour)}:${String.format("%02d", minute)}:${String.format("%02d", second)}"
         add_food.setOnClickListener {
-            dialog!!.setContentView(R.layout.pop_food)
+            dialog!!.setContentView(R.layout.pop_weight)
             dialog!!.show()
-            val input:TextInputEditText=dialog!!.findViewById(R.id.foodt)
+//            val input:TextInputEditText=dialog!!.findViewById(R.id.foodt)
             val add:AppCompatButton=dialog!!.findViewById(R.id.add)
             val ref: DatabaseReference =
                 FirebaseDatabase.getInstance()
@@ -65,37 +65,37 @@ class Food_track : AppCompatActivity() {
                                 .show()
                         }
                     }
-            add.setOnClickListener {
-                try{
-                    if (input.text!!.isNotEmpty()) {
-                        if (food_it != null) {
-                            val fod = Food(
-                                curr_date.toString(),
-                                input.text.toString() + " "+formattedTime.toString() + "\n" + food_it.toString()
-                            )
-                            ref.child("foods")
-                                .child(curr_date.toString())
-                                .setValue(fod)
-                                .addOnSuccessListener {
-                                }
-                        } else {
-                            val fod = Food(curr_date.toString(), input.text.toString()+ " "+ formattedTime.toString())
-                            ref.child("foods")
-                                .child(curr_date.toString())
-                                .setValue(fod)
-                                .addOnSuccessListener {
-                                }
-                        }
-                        dialog!!.dismiss()
-                    } else {
-                        input.error = "put food item"
-                        return@setOnClickListener
-                    }
-                }catch (_:Exception)
-                {
-
-                }
-            }
+//            add.setOnClickListener {
+//                try{
+//                    if (input.text!!.isNotEmpty()) {
+//                        if (food_it != null) {
+//                            val fod = Food(
+//                                curr_date.toString(),
+//                                input.text.toString() + " "+formattedTime.toString() + "\n" + food_it.toString()
+//                            )
+//                            ref.child("foods")
+//                                .child(curr_date.toString())
+//                                .setValue(fod)
+//                                .addOnSuccessListener {
+//                                }
+//                        } else {
+//                            val fod = Food(curr_date.toString(), input.text.toString()+ " "+ formattedTime.toString())
+//                            ref.child("foods")
+//                                .child(curr_date.toString())
+//                                .setValue(fod)
+//                                .addOnSuccessListener {
+//                                }
+//                        }
+//                        dialog!!.dismiss()
+//                    } else {
+//                        input.error = "put food item"
+//                        return@setOnClickListener
+//                    }
+//                }catch (_:Exception)
+//                {
+//
+//                }
+//            }
         }
     }
 
